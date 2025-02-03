@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lắc Xí Ngầu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #FF0000;
+            background-image: url('https://example.com/tet-at-ty.jpg'); /* Thay thế bằng URL hình ảnh Tết Ất Tỵ */
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        #rolledNumbers {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lắc Xí Ngầu - Tết Vui Xuân</h1>
+        <label>Nhập số bắt đầu:</label>
+        <input type="number" id="startNum" min="1">
+        <label>Nhập số kết thúc:</label>
+        <input type="number" id="endNum" min="1">
+        <button onclick="rollDice()">Lắc xí ngầu</button>
+        <button onclick="newRound()">Vòng quay mới</button>
+        <h2 id="result">Số: </h2>
+        <h3>Các số đã ra:</h3>
+        <p id="rolledNumbers"></p>
+        <audio id="backgroundMusic" autoplay loop>
+            <source src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" type="audio/mpeg">
+        </audio>
+        <button onclick="toggleMusic()">Bật/Tắt Nhạc</button>
+    </div>
+
+    <script>
+        let availableNumbers = [];
+        let rolledNumbers = [];
+
+        function initializeNumbers() {
+            let start = parseInt(document.getElementById("startNum").value);
+            let end = parseInt(document.getElementById("endNum").value);
+            if (isNaN(start) || isNaN(end) || start >= end) {
+                alert("Vui lòng nhập số hợp lệ!");
+                return false;
+            }
+            availableNumbers = [];
+            rolledNumbers = [];
+            for (let i = start; i <= end; i++) {
+                availableNumbers.push(i);
+            }
+            document.getElementById("rolledNumbers").innerText = "";
+            document.getElementById("result").innerText = "Số: ";
+            return true;
+        }
+
+        function rollDice() {
+            if (availableNumbers.length === 0) {
+                if (!initializeNumbers()) return;
+            }
+            let randomIndex = Math.floor(Math.random() * availableNumbers.length);
+            let chosenNumber = availableNumbers.splice(randomIndex, 1)[0];
+            rolledNumbers.push(chosenNumber);
+            document.getElementById("result").innerText = "Số: " + chosenNumber;
+            document.getElementById("rolledNumbers").innerText = rolledNumbers.join(", ");
+        }
+
+        function newRound() {
+            initializeNumbers();
+        }
+
+        function toggleMusic() {
+            let music = document.getElementById("backgroundMusic");
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+    </script>
+</body>
+</html>
