@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vietnam Compliance Analyzer | Phân Tích Tuân Thủ Pháp Luật</title>
+<style>
+  :root {
+    --red: #C8102E;
+    --gold: #FFD700;
+    --dark: #1a1a2e;
+    --navy: #16213e;
+    --blue: #0f3460;
+    --accent: #e94560;
+    --green: #00b894;
+    --orange: #e17055;
+    --yellow: #fdcb6e;
+    --gray-light: #f8f9fa;
+    --gray: #6c757d;
+    --white: #ffffff;
+    --shadow: 0 4px 24px rgba(0,0,0,0.12);
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: #f0f2f5;
+    color: #2d3436;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, var(--red) 0%, #8b0000 100%);
+    color: white;
+    padding: 0;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .header-flag {
+    font-size: 32px;
+  }
+  .header-title h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .header-title p {
+    font-size: 0.78rem;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+  .header-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-chip {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .stat-chip span { font-weight: 700; font-size: 1rem; }
+
+  /* ── LAYOUT ── */
+  .layout {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 14px 18px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--gray-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--red);
+  }
+  .card-body { padding: 16px; }
+
+  .filter-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 9px 14px;
+    margin-bottom: 6px;
+    border: 1.5px solid #e0e0e0;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    color: #2d3436;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--red);
+    color: white;
+    border-color: var(--red);
+  }
+  .filter-btn .badge {
+    margin-left: auto;
+    background: #eee;
+    color: #555;
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .filter-btn.active .badge {
+    background: rgba(255,255,255,0.25);
+    color: white;
+  }
+
+  /* RISK METER */
+  .risk-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.83rem;
+  }
+  .risk-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+  }
+  .risk-critical { background: #d63031; }
+  .risk-high { background: #e17055; }
+  .risk-medium { background: #fdcb6e; }
+  .risk-low { background: #00b894; }
+
+  /* ── MAIN CONTENT ── */
+  .main { display: flex; flex-direction: column; gap: 20px; }
+
+  /* SEARCH BAR */
+  .search-bar {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .search-bar input {
+    flex: 1;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .search-bar input:focus { border-color: var(--red); }
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .btn-red { background: var(--red); color: white; }
+  .btn-red:hover { background: #a00020; }
+  .btn-outline {
+    background: white;
+    border: 1.5px solid var(--red);
+    color: var(--red);
+  }
+  .btn-outline:hover { background: #fff5f7; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: white;
+    padding: 6px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    border: none;
+    background: transparent;
+    color: var(--gray);
+    transition: all 0.2s;
+  }
+  .tab.active { background: var(--red); color: white; }
+  .tab:hover:not(.active) { background: #f5f5f5; }
+
+  /* REGULATION CARDS */
+  .reg-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border-left: 5px solid var(--red);
+    transition: transform 0.2s;
+  }
+  .reg-card:hover { transform: translateY(-2px); }
+  .reg-card.critical { border-left-color: #d63031; }
+  .reg-card.high { border-left-color: #e17055; }
+  .reg-card.medium { border-left-color: #fdcb6e; }
+  .reg-card.low { border-left-color: #00b894; }
+
+  .reg-header {
+    padding: 16px 20px;
+    background: linear-gradient(to right, #fafafa, white);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .reg-title-area { flex: 1; }
+  .reg-id {
+    font-size: 0.75rem;
+    color: var(--gray);
+    font-family: monospace;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .reg-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+  .reg-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .tag {
+    font-size: 0.73rem;
+    padding: 3px 9px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .tag-industry { background: #e8f4fd; color: #2980b9; }
+  .tag-type { background: #fef9e7; color: #d68910; }
+  .tag-status-active { background: #eafaf1; color: #1e8449; }
+  .tag-status-draft { background: #fdf2f8; color: #8e44ad; }
+  .tag-status-upcoming { background: #fff3cd; color: #856404; }
+
+  .reg-priority {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .priority-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .priority-critical { background: #fde8e8; color: #c0392b; border: 1px solid #e74c3c; }
+  .priority-high { background: #fdebd0; color: #ca6f1e; border: 1px solid #e59866; }
+  .priority-medium { background: #fef9e7; color: #b7950b; border: 1px solid #f9e79f; }
+  .priority-low { background: #eafaf1; color: #1e8449; border: 1px solid #a9dfbf; }
+  .effective-date { font-size: 0.75rem; color: var(--gray); }
+
+  /* ACCORDION BODY */
+  .reg-body { padding: 0 20px 20px; display: none; }
+  .reg-body.open { display: block; }
+
+  .section-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--red);
+    margin: 18px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #fde8e8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .summary-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--red);
+  }
+  .summary-label { font-size: 0.72rem; color: var(--gray); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .summary-value { font-size: 0.88rem; font-weight: 600; color: var(--dark); }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: linear-gradient(135deg, #fff8e1, #fffde7);
+    border: 1px solid #ffe082;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    margin-top: 10px;
+  }
+  .highlight-box ul { padding-left: 18px; margin-top: 6px; }
+  .highlight-box li { margin-bottom: 5px; }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; margin-top: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  th {
+    background: var(--red);
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+  td { padding: 9px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+  tr:nth-child(even) { background: #fafafa; }
+  tr:hover { background: #fff5f5; }
+
+  .impact-positive { color: #1e8449; font-weight: 600; }
+  .impact-negative { color: #c0392b; font-weight: 600; }
+  .impact-neutral { color: #7f8c8d; }
+
+  /* RISK BADGES */
+  .risk-badge {
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .risk-critical-badge { background: #fde8e8; color: #c0392b; }
+  .risk-high-badge { background: #fdebd0; color: #ca6f1e; }
+  .risk-medium-badge { background: #fef9e7; color: #b7950b; }
+  .risk-low-badge { background: #eafaf1; color: #1e8449; }
+
+  /* AI SECTION */
+  .ai-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .ai-item {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .ai-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+  /* INSIGHT SECTION */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .insight-item {
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .insight-opportunity { background: #eafaf1; border: 1px solid #a9dfbf; color: #1e8449; }
+  .insight-risk { background: #fde8e8; border: 1px solid #f1948a; color: #c0392b; }
+  .insight-neutral { background: #eaf4fc; border: 1px solid #aed6f1; color: #1a5276; }
+
+  /* SOURCE BOX */
+  .source-box {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 10px;
+  }
+  .source-item {
+    font-size: 0.82rem;
+    padding: 5px 0;
+    border-bottom: 1px dashed #dee2e6;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .source-item:last-child { border-bottom: none; }
+  .source-item a { color: var(--red); text-decoration: none; word-break: break-all; }
+  .source-item a:hover { text-decoration: underline; }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    color: #856404;
+    margin-top: 10px;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--dark);
+    color: #aaa;
+    text-align: center;
+    padding: 20px;
+    font-size: 0.8rem;
+    margin-top: 32px;
+  }
+  .footer strong { color: white; }
+
+  /* LOADING */
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .loading-overlay.show { display: flex; }
+  .loading-box {
+    background: white;
+    border-radius: 12px;
+    padding: 30px 40px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .spinner {
+    width: 48px; height: 48px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--red);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+    margin: 0 auto 14px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* TOGGLE ARROW */
+  .toggle-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+    color: var(--gray);
+  }
+  .toggle-arrow.open { transform: rotate(180deg); }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray);
+  }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+  .empty-state h3 { font-size: 1.1rem; margin-bottom: 8px; }
+
+  /* ALERT BANNER */
+  .alert-banner {
+    background: linear-gradient(135deg, var(--red), #c0392b);
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 4px;
+  }
+  .alert-banner .alert-icon { font-size: 1.3rem; flex-shrink: 0; }
+
+  /* QUICK STATS ROW */
+  .quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  .qs-item {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    text-align: center;
+  }
+  .qs-number {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .qs-label { font-size: 0.78rem; color: var(--gray); }
+  .qs-red { color: var(--red); }
+  .qs-orange { color: var(--orange); }
+  .qs-green { color: var(--green); }
+  .qs-blue { color: #3498db; }
+
+  /* PRINT */
+  @media print {
+    .sidebar, .search-bar, .tabs, .header-stats { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    .reg-body { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-flag">🇻🇳</div>
+      <div class="header-title">
+        <h1>VIETNAM COMPLIANCE ANALYZER</h1>
+        <p>Hệ thống phân tích & theo dõi quy định pháp luật | Logistics · Vận tải · Sản xuất · Xây dựng</p>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="stat-chip">📋 <span id="totalCount">8</span> Văn bản</div>
+      <div class="stat-chip">🔴 <span id="criticalCount">3</span> Khẩn cấp</div>
+      <div class="stat-chip">📅 Cập nhật: <span>17/05/2026</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <div style="font-weight:600; color:#2d3436;">Đang phân tích quy định...</div>
+    <div style="font-size:0.8rem; color:#888; margin-top:6px;">Đang kiểm tra nguồn chính thức</div>
+  </div>
+</div>
+
+<!-- ─── LAYOUT ─── -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- FILTER BY INDUSTRY -->
+    <div class="card">
+      <div class="card-header">🏭 Lọc theo ngành</div>
+      <div class="card-body">
+        <button class="filter-btn active" onclick="filterBy('all', this)">
+          🌐 Tất cả ngành <span class="badge" id="badge-all">8</span>
+        </button>
+        <button class="filter-btn" onclick="filterBy('logistics', this)">
+          🚛 Logistics & Kho bãi <span class="badge" id="badge-logistics">3</span>
+        </button>
+        <button class="filter-btn" onclick="filterBy('transport', this)">
+          🚌 Vận tải & Container <span class="badge" id="badge-transport">2</span>
+        </button>
+        <button class="filter-btn" onclick="filterBy('manufacturing', this)">
+          🏗️ Sản xuất & Thép <span class="badge" id="badge-manufacturing">2</span>
+        </button>
+        <button class="filter-btn" onclick="filterBy('construction', this)">
+          🏢 Xây dựng & KCN <span class="badge" id="badge-construction">3</span>
+        </button>
+        <button class="filter-btn" onclick="filterBy('tax', this)">
+          💰 Thuế & Hải quan <span class="badge" id="badge-tax">2</span>
+        </button>
+        <button class="filter-btn" onclick="filterBy('labor', this)">
+          👷 Lao động & Môi trường <span class="badge" id="badge-labor">1</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- FILTER BY PRIORITY -->
+    <div class="card">
+      <div class="card-header">⚠️ Mức độ ưu tiên</div>
+      <div class="card-body">
+        <div class="risk-item">
+          <span><span class="risk-dot risk-critical"></span>Khẩn cấp – Xử lý ngay</span>
+          <strong style="color:#d63031">3</strong>
+        </div>
+        <div class="risk-item">
+          <span><span class="risk-dot risk-high"></span>Cao – Trong 30 ngày</span>
+          <strong style="color:#e17055">2</strong>
+        </div>
+        <div class="risk-item">
+          <span><span class="risk-dot risk-medium"></span>Trung bình – Trong 90 ngày</span>
+          <strong style="color:#fdcb6e">2</strong>
+        </div>
+        <div class="risk-item">
+          <span><span class="risk-dot risk-low"></span>Thấp – Theo dõi</span>
+          <strong style="color:#00b894">1</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK GUIDE -->
+    <div class="card">
+      <div class="card-header">💡 Hướng dẫn sử dụng</div>
+      <div class="card-body" style="font-size:0.82rem; line-height:1.7; color:#555;">
+        <p>📌 <strong>Click vào tên văn bản</strong> để xem phân tích đầy đủ gồm:</p>
+        <ul style="padding-left:16px; margin-top:8px;">
+          <li>Tóm tắt nhanh</li>
+          <li>Điều quan trọng cần biết</li>
+          <li>Ảnh hưởng doanh nghiệp</li>
+          <li>Rủi ro nếu vi phạm</li>
+          <li>Kế hoạch hành động</li>
+          <li>AI hỗ trợ compliance</li>
+          <li>Insight kinh doanh</li>
+          <li>Nguồn chính thức</li>
+        </ul>
+        <br>
+        <p style="color:#c0392b; font-weight:600;">⚠️ Tất cả thông tin dựa trên nguồn chính thức của Chính phủ Việt Nam.</p>
+      </div>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="disclaimer">
+      <strong>⚠️ Lưu ý pháp lý:</strong> Công cụ này chỉ mang tính tham khảo, không thay thế tư vấn pháp lý chuyên nghiệp. Doanh nghiệp cần tham khảo luật sư hoặc chuyên gia pháp lý trước khi ra quyết định.
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ALERT BANNER -->
+    <div class="alert-banner">
+      <div class="alert-icon">🚨</div>
+      <div>
+        <strong>Cảnh báo tuân thủ quan trọng:</strong> Có 3 quy định mới có hiệu lực trong 30 ngày tới liên quan đến vận tải, logistics và kinh doanh container. Doanh nghiệp cần xem xét ngay.
+      </div>
+    </div>
+
+    <!-- QUICK STATS -->
+    <div class="quick-stats">
+      <div class="qs-item">
+        <div class="qs-number qs-red">8</div>
+        <div class="qs-label">Văn bản đang theo dõi</div>
+      </div>
+      <div class="qs-item">
+        <div class="qs-number qs-orange">3</div>
+        <div class="qs-label">Cần xử lý khẩn cấp</div>
+      </div>
+      <div class="qs-item">
+        <div class="qs-number qs-green">5</div>
+        <div class="qs-label">Có hiệu lực</div>
+      </div>
+      <div class="qs-item">
+        <div class="qs-number qs-blue">3</div>
+        <div class="qs-label">Sắp có hiệu lực</div>
+      </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm văn bản, nghị định, thông tư..." oninput="searchRegs()">
+      <button class="btn btn-outline" onclick="clearSearch()">Xóa</button>
+      <button class="btn btn-red" onclick="showAddModal()">+ Thêm văn bản</button>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('all', this)">📋 Tất cả (8)</button>
+      <button class="tab" onclick="switchTab('active', this)">✅ Có hiệu lực (5)</button>
+      <button class="tab" onclick="switchTab('upcoming', this)">📅 Sắp hiệu lực (3)</button>
+      <button class="tab" onclick="switchTab('draft', this)">📝 Dự thảo (0)</button>
+    </div>
+
+    <!-- REGULATION CARDS -->
+    <div id="regList">
+      <!-- Populated by JS -->
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <strong>Vietnam Compliance Analyzer</strong> — Dành cho ngành Logistics · Vận tải · Sản xuất container · Xây dựng · KCN<br>
+  <span style="margin-top:6px; display:block; font-size:0.75rem;">
+    Nguồn: chinhphu.vn · moj.gov.vn · mt.gov.vn · mof.gov.vn · customs.gov.vn · thuvienphapluat.vn<br>
+    ⚠️ Chỉ mang tính tham khảo — Không thay thế tư vấn pháp lý chuyên nghiệp
+  </span>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────
+//  DATA: Vietnam Regulations Database
+// ─────────────────────────────────────────────
+const regulations = [
+  {
+    id: "ND-168-2024",
+    type: "Nghị định",
+    title: "Nghị định 168/2024/NĐ-CP về xử phạt vi phạm hành chính trong lĩnh vực giao thông đường bộ",
+    industry: ["transport", "logistics"],
+    status: "active",
+    priority: "critical",
+    effectiveDate: "01/01/2025",
+    authority: "Chính phủ Việt Nam",
+    appliesTo: "Doanh nghiệp vận tải, lái xe, xe đầu kéo, container, logistics",
+    summary: `Nghị định 168/2024/NĐ-CP tăng mức xử phạt vi phạm giao thông lên rất cao, đặc biệt với xe tải nặng và xe container. Nhiều mức phạt tăng 3-5 lần so với trước. Tài xế vi phạm nồng độ cồn bị phạt tới 40 triệu đồng và tước GPLX 24 tháng. Xe quá tải có thể bị phạt tới 80 triệu đồng.`,
+    keyPoints: [
+      "Vi phạm nồng độ cồn: tài xế xe tải có thể bị phạt tới 40 triệu đồng + tước GPLX 22-24 tháng",
+      "Vi phạm tốc độ trên 20 km/h: phạt 6-8 triệu đồng với xe tải nặng",
+      "Xe quá tải trọng: phạt tới 80 triệu đồng và tạm giữ xe đến 10 ngày",
+      "Không có giấy phép lưu hành xe quá khổ: phạt 30-40 triệu đồng",
+      "Chủ xe chịu trách nhiệm liên đới nếu xe vi phạm",
+    ],
+    impacts: [
+      { area: "Chi phí vận hành", impact: "Tăng chi phí tuân thủ, đào tạo tài xế, bảo hiểm", type: "negative" },
+      { area: "Quản lý tài xế", impact: "Bắt buộc giám sát chặt chẽ nồng độ cồn và tốc độ lái xe", type: "negative" },
+      { area: "Xe quá tải", impact: "Rủi ro phạt rất cao, ảnh hưởng dòng tiền và kế hoạch giao hàng", type: "negative" },
+      { area: "Uy tín doanh nghiệp", impact: "Vi phạm nhiều lần có thể bị thu hồi giấy phép kinh doanh vận tải", type: "negative" },
+      { area: "Cơ hội cạnh tranh", impact: "DN tuân thủ tốt có lợi thế cạnh tranh, khách hàng tin tưởng hơn", type: "positive" },
+    ],
+    risks: [
+      { risk: "Tài xế vi phạm nồng độ cồn, phạt 40 triệu + tước bằng", level: "critical" },
+      { risk: "Xe quá tải bị tạm giữ, gián đoạn giao hàng, phạt 80 triệu", level: "critical" },
+      { risk: "Vi phạm lặp lại dẫn đến thu hồi giấy phép kinh doanh", level: "high" },
+      { risk: "Không có GPS/camera giám sát, không thể chứng minh tuân thủ", level: "high" },
+      { risk: "Tài xế không được đào tạo lại các mức phạt mới", level: "medium" },
+    ],
+    actions: [
+      { task: "Tổ chức họp khẩn: phổ biến NĐ 168/2024 cho toàn bộ tài xế", dept: "HR + Vận hành", priority: "critical", deadline: "Ngay lập tức" },
+      { task: "Lắp đặt thiết bị đo nồng độ cồn tại tất cả điểm xuất phát xe", dept: "Vận hành", priority: "critical", deadline: "Trong 7 ngày" },
+      { task: "Rà soát toàn bộ xe đầu kéo/container về tải trọng cho phép", dept: "Kỹ thuật", priority: "critical", deadline: "Trong 7 ngày" },
+      { task: "Cập nhật hợp đồng tài xế với điều khoản kỷ luật vi phạm", dept: "Pháp lý + HR", priority: "high", deadline: "Trong 14 ngày" },
+      { task: "Cài đặt phần mềm giám sát hành trình (GPS + camera), kết nối với NĐ 10/2020", dept: "IT + Vận hành", priority: "high", deadline: "Trong 30 ngày" },
+      { task: "Đào tạo lại toàn bộ tài xế về quy định mới", dept: "HR", priority: "high", deadline: "Trong 30 ngày" },
+      { task: "Xây dựng SOP kiểm tra xe trước khi xuất bến", dept: "Vận hành", priority: "medium", deadline: "Trong 45 ngày" },
+    ],
+    aiSupport: [
+      { icon: "🤖", text: "AI tóm tắt NĐ 168 thành checklist đơn giản cho tài xế" },
+      { icon: "📊", text: "AI so sánh NĐ 168 vs NĐ 100/2019 để thấy thay đổi" },
+      { icon: "⏰", text: "AI nhắc nhở lịch kiểm tra xe và hạn giấy phép lưu hành" },
+      { icon: "📷", text: "AI phân tích camera hành trình phát hiện vi phạm tốc độ" },
+      { icon: "📋", text: "AI tạo SOP kiểm tra xe tự động hàng ngày" },
+      { icon: "🔍", text: "AI audit hồ sơ tài xế phát hiện thiếu giấy phép" },
+    ],
+    insights: [
+      { type: "opportunity", icon: "💡", text: "Doanh nghiệp đầu tư sớm vào GPS/camera và đào tạo tài xế sẽ có lợi thế cạnh tranh về độ tin cậy với khách hàng lớn (FDI, xuất khẩu)." },
+      { type: "opportunity", icon: "🛡️", text: "Cơ hội cung cấp dịch vụ kiểm tra xe và đào tạo tài xế tuân thủ NĐ 168 cho các DN vận tải nhỏ." },
+      { type: "risk", icon: "⚠️", text: "Doanh nghiệp có đội xe lớn mà chưa lắp thiết bị giám sát sẽ chịu rủi ro tài chính rất cao." },
+      { type: "neutral", icon: "📈", text: "Nghiên cứu đầu tư xe đầu kéo mới đáp ứng tiêu chuẩn phát thải để tránh các rủi ro phạt tương lai." },
+    ],
+    sources: [
+      { label: "NĐ 168/2024/NĐ-CP – Chính phủ Việt Nam", url: "https://chinhphu.vn" },
+      { label: "Thư viện pháp luật – NĐ 168/2024", url: "https://thuvienphapluat.vn" },
+      { label: "Cổng thông tin Bộ Công an", url: "https://bocongan.gov.vn" },
+    ]
+  },
+
+  {
+    id: "TT-39-2023",
+    type: "Thông tư",
+    title: "Thông tư 39/2023/TT-BTC về hồ sơ hải quan và thủ tục thông quan hàng hóa xuất nhập khẩu",
+    industry: ["logistics", "tax"],
+    status: "active",
+    priority: "high",
+    effectiveDate: "01/06/2023",
+    authority: "Bộ Tài chính",
+    appliesTo: "Doanh nghiệp xuất nhập khẩu, khai báo hải quan, logistics, kho ngoại quan",
+    summary: `Thông tư 39/2023/TT-BTC sửa đổi quy trình khai báo hải quan, bổ sung yêu cầu mới về hồ sơ điện tử, mã HS code và các chứng từ kèm theo. Áp dụng cho tất cả doanh nghiệp xuất nhập khẩu qua hệ thống VNACCS/VCIS.`,
+    keyPoints: [
+      "Bắt buộc khai báo điện tử 100% qua hệ thống VNACCS/VCIS",
+      "Bổ sung mã phân loại hàng hóa theo HS Code 2022",
+      "Yêu cầu chứng từ xuất xứ điện tử (e-C/O) cho hàng CPTPP/EVFTA",
+      "Thời gian thông quan rút ngắn: 4 tiếng với luồng xanh, 8 tiếng luồng vàng",
+      "Phạt nặng nếu khai sai mã HS hoặc trị giá hải quan",
+    ],
+    impacts: [
+      { area: "Thủ tục hải quan", impact: "Đơn giản hóa hồ sơ, giảm thời gian thông quan", type: "positive" },
+      { area: "Chi phí logistics", impact: "Giảm chi phí lưu kho do thông quan nhanh hơn", type: "positive" },
+      { area: "Hệ thống IT", impact: "Cần nâng cấp phần mềm khai báo hải quan, tích hợp VNACCS", type: "negative" },
+      { area: "Nhân sự hải quan", impact: "Phải đào tạo lại về HS Code 2022 và quy trình mới", type: "negative" },
+    ],
+    risks: [
+      { risk: "Khai sai mã HS code dẫn đến truy thu thuế, phạt vi phạm", level: "high" },
+      { risk: "Không tích hợp hệ thống IT với VNACCS, ách tắc thông quan", level: "high" },
+      { risk: "Thiếu chứng từ e-C/O cho hàng hưởng ưu đãi CPTPP/EVFTA", level: "medium" },
+      { risk: "Nhân viên khai sai trị giá hải quan bị xử phạt hành chính", level: "medium" },
+    ],
+    actions: [
+      { task: "Rà soát và cập nhật toàn bộ danh mục HS Code theo phiên bản 2022", dept: "Xuất nhập khẩu", priority: "high", deadline: "Trong 14 ngày" },
+      { task: "Nâng cấp phần mềm khai báo hải quan kết nối VNACCS/VCIS", dept: "IT", priority: "high", deadline: "Trong 30 ngày" },
+      { task: "Đào tạo nhân viên về quy trình khai báo điện tử mới", dept: "HR + Xuất nhập khẩu", priority: "high", deadline: "Trong 30 ngày" },
+      { task: "Thiết lập quy trình kiểm tra chứng từ e-C/O tự động", dept: "Pháp lý + XNK", priority: "medium", deadline: "Trong 60 ngày" },
+    ],
+    aiSupport: [
+      { icon: "🔢", text: "AI tự động phân loại và đề xuất mã HS Code theo mô tả hàng hóa" },
+      { icon: "📄", text: "AI kiểm tra hồ sơ hải quan tự động trước khi nộp, phát hiện lỗi" },
+      { icon: "⏰", text: "AI theo dõi trạng thái thông quan và cảnh báo nếu bị giữ hàng" },
+      { icon: "📊", text: "AI phân tích lịch sử khai báo, phát hiện rủi ro kiểm tra" },
+    ],
+    insights: [
+      { type: "opportunity", icon: "🚀", text: "DN logistics nào xây dựng hệ thống khai báo tự động, nhanh chóng sẽ thu hút nhiều khách hàng XNK hơn." },
+      { type: "opportunity", icon: "💰", text: "Cơ hội tiết kiệm chi phí lưu kho đáng kể nhờ thông quan luồng xanh." },
+      { type: "neutral", icon: "📋", text: "Nên đăng ký chứng nhận AEO (Doanh nghiệp ưu tiên) để được ưu đãi thông quan." },
+    ],
+    sources: [
+      { label: "TT 39/2023/TT-BTC – Bộ Tài chính", url: "https://mof.gov.vn" },
+      { label: "Tổng cục Hải quan Việt Nam", url: "https://customs.gov.vn" },
+      { label: "Thư viện pháp luật", url: "https://thuvienphapluat.vn" },
+    ]
+  },
+
+  {
+    id: "ND-115-2020",
+    type: "Nghị định",
+    title: "Nghị định 115/2020/NĐ-CP về điều kiện kinh doanh vận tải bằng xe ô tô và sửa đổi bổ sung 2024",
+    industry: ["transport", "logistics"],
+    status: "active",
+    priority: "high",
+    effectiveDate: "01/10/2020",
+    authority: "Bộ Giao thông Vận tải",
+    appliesTo: "Doanh nghiệp vận tải hàng hóa, container, đầu kéo semi-trailer",
+    summary: `Nghị định 115/2020/NĐ-CP quy định điều kiện kinh doanh vận tải, yêu cầu thiết bị giám sát hành trình (GPS), camera trong cabin, và quản lý tài xế. Các sửa đổi năm 2024 tăng thêm yêu cầu về thiết bị an toàn.`,
+    keyPoints: [
+      "Bắt buộc lắp thiết bị giám sát hành trình GPS cho xe tải >7.5 tấn",
+      "Bắt buộc camera trong cabin xe khách và xe container từ 2024",
+      "Quản lý lái xe: không lái quá 10 tiếng/ngày, nghỉ tối thiểu 8 tiếng",
+      "Giấy phép kinh doanh vận tải: gia hạn định kỳ, kiểm tra hồ sơ",
+      "Xe đầu kéo kéo sơ mi rơ moóc phải có phù hiệu theo tuyến",
+    ],
+    impacts: [
+      { area: "Đội xe đầu kéo", impact: "Phải lắp đủ GPS + camera, kết nối Bộ GTVT", type: "negative" },
+      { area: "Quản lý tài xế", impact: "Giám sát thời gian lái xe tự động, giảm tai nạn", type: "positive" },
+      { area: "Hồ sơ xe", impact: "Phải duy trì hồ sơ đầy đủ: đăng kiểm, bảo hiểm, phù hiệu", type: "negative" },
+      { area: "Chi phí thiết bị", impact: "Chi phí lắp GPS + camera ~5-15 triệu/xe", type: "negative" },
+    ],
+    risks: [
+      { risk: "Xe không có GPS/camera bị đình chỉ hoạt động", level: "critical" },
+      { risk: "Tài xế lái quá giờ quy định, chủ xe chịu trách nhiệm", level: "high" },
+      { risk: "Giấy phép kinh doanh vận tải hết hạn chưa gia hạn", level: "high" },
+      { risk: "Thiết bị GPS không kết nối đúng chuẩn Bộ GTVT", level: "medium" },
+    ],
+    actions: [
+      { task: "Kiểm kê toàn bộ xe: thiết bị GPS đã kết nối Bộ GTVT chưa?", dept: "Kỹ thuật", priority: "critical", deadline: "Trong 7 ngày" },
+      { task: "Lắp camera cabin cho xe container chưa có camera", dept: "Kỹ thuật", priority: "high", deadline: "Trong 30 ngày" },
+      { task: "Cập nhật phần mềm quản lý đội xe: theo dõi giờ lái", dept: "IT + Vận hành", priority: "high", deadline: "Trong 30 ngày" },
+      { task: "Gia hạn giấy phép kinh doanh vận tải nếu sắp hết hạn", dept: "Pháp lý", priority: "high", deadline: "Trước hạn 30 ngày" },
+    ],
+    aiSupport: [
+      { icon: "🗺️", text: "AI phân tích dữ liệu GPS phát hiện tài xế lái quá giờ" },
+      { icon: "📅", text: "AI nhắc nhở gia hạn đăng kiểm, bảo hiểm, giấy phép tự động" },
+      { icon: "📊", text: "AI dashboard quản lý toàn bộ đội xe theo thời gian thực" },
+      { icon: "🔍", text: "AI phát hiện lộ trình bất thường, vi phạm phù hiệu tuyến" },
+    ],
+    insights: [
+      { type: "opportunity", icon: "🔧", text: "Cơ hội cung cấp giải pháp lắp đặt GPS/camera và phần mềm quản lý đội xe cho các DN vận tải nhỏ chưa tuân thủ." },
+      { type: "neutral", icon: "📈", text: "Đầu tư vào hệ thống quản lý đội xe hiện đại giúp tối ưu nhiên liệu và bảo trì, hoàn vốn trong 12-18 tháng." },
+    ],
+    sources: [
+      { label: "NĐ 115/2020/NĐ-CP – Chính phủ", url: "https://chinhphu.vn" },
+      { label: "Bộ Giao thông Vận tải", url: "https://mt.gov.vn" },
+      { label: "Thư viện pháp luật", url: "https://thuvienphapluat.vn" },
+    ]
+  },
+
+  {
+    id: "ND-08-2022",
+    type: "Nghị định",
+    title: "Nghị định 08/2022/NĐ-CP về bảo vệ môi trường trong sản xuất công nghiệp và KCN",
+    industry: ["manufacturing", "construction", "labor"],
+    status: "active",
+    priority: "critical",
+    effectiveDate: "10/01/2022",
+    authority: "Bộ Tài nguyên và Môi trường",
+    appliesTo: "Nhà máy sản xuất thép, container, sơ mi rơ moóc, KCN, xưởng gia công kim loại",
+    summary: `Nghị định 08/2022/NĐ-CP hướng dẫn chi tiết Luật Bảo vệ Môi trường 2020. Doanh nghiệp sản xuất công nghiệp phải có Giấy phép Môi trường (GPM), báo cáo quan trắc định kỳ, và xử lý chất thải đúng quy định. Phạt nặng đến 2 tỷ đồng nếu vi phạm.`,
+    keyPoints: [
+      "Tất cả cơ sở sản xuất phải có Giấy phép Môi trường (GPM) hoặc ĐTM được phê duyệt",
+      "Quan trắc nước thải, khí thải định kỳ 3-6 tháng/lần, nộp báo cáo",
+      "Chất thải nguy hại (dầu thải, sơn, hóa chất) phải thu gom, xử lý đúng quy trình",
+      "KCN phải có hệ thống xử lý nước thải tập trung đạt chuẩn QCVN",
+      "Phạt tiền đến 2 tỷ đồng nếu xả thải vượt chuẩn, đình chỉ sản xuất nếu tái phạm",
+    ],
+    impacts: [
+      { area: "Nhà máy thép/container", impact: "Bắt buộc có GPM, quan trắc khí thải hàn điện thường xuyên", type: "negative" },
+      { area: "Chi phí môi trường", impact: "Tăng chi phí xử lý chất thải, quan trắc định kỳ (50-200 triệu/năm)", type: "negative" },
+      { area: "Mặt bằng KCN", impact: "KCN chưa có HTXLNT tập trung đạt chuẩn có nguy cơ bị đình chỉ", type: "negative" },
+      { area: "Uy tín xuất khẩu", impact: "Tuân thủ môi trường giúp duy trì đơn hàng từ khách châu Âu (ESG)", type: "positive" },
+    ],
+    risks: [
+      { risk: "Không có GPM, bị đình chỉ sản xuất và phạt đến 2 tỷ đồng", level: "critical" },
+      { risk: "Xả thải vượt chuẩn bị thanh tra đột xuất, đình chỉ hoạt động", level: "critical" },
+      { risk: "Chất thải nguy hại không có hợp đồng thu gom đúng quy định", level: "high" },
+      { risk: "Mất đơn hàng xuất khẩu do không đáp ứng tiêu chuẩn ESG", level: "high" },
+      { risk: "Không có kế hoạch phòng ngừa sự cố môi trường", level: "medium" },
+    ],
+    actions: [
+      { task: "Kiểm tra GPM/ĐTM: còn hiệu lực không? Có phù hợp với quy mô hiện tại không?", dept: "Pháp lý + Môi trường", priority: "critical", deadline: "Trong 7 ngày" },
+      { task: "Ký hợp đồng với đơn vị quan trắc môi trường được cấp phép", dept: "Môi trường", priority: "critical", deadline: "Trong 14 ngày" },
+      { task: "Ký hợp đồng thu gom chất thải nguy hại với đơn vị được phép", dept: "Vận hành + Mua sắm", priority: "high", deadline: "Trong 14 ngày" },
+      { task: "Kiểm tra HTXLNT/XLKT: đạt QCVN chưa, cần nâng cấp không?", dept: "Kỹ thuật", priority: "high", deadline: "Trong 30 ngày" },
+      { task: "Lập kế hoạch phòng ngừa và ứng phó sự cố môi trường", dept: "Môi trường + An toàn", priority: "medium", deadline: "Trong 60 ngày" },
+      { task: "Đào tạo nhân viên về quản lý chất thải và báo cáo môi trường", dept: "HR + Môi trường", priority: "medium", deadline: "Trong 60 ngày" },
+    ],
+    aiSupport: [
+      { icon: "📊", text: "AI tổng hợp số liệu quan trắc định kỳ, tạo báo cáo môi trường tự động" },
+      { icon: "⏰", text: "AI nhắc lịch quan trắc, hạn nộp báo cáo môi trường" },
+      { icon: "🔍", text: "AI so sánh kết quả quan trắc với QCVN, cảnh báo vượt ngưỡng" },
+      { icon: "📋", text: "AI tạo checklist kiểm tra nội bộ môi trường hàng tháng" },
+      { icon: "🌿", text: "AI theo dõi hồ sơ chứng từ chất thải nguy hại" },
+    ],
+    insights: [
+      { type: "opportunity", icon: "🌍", text: "Đầu tư vào hệ thống môi trường đạt chuẩn giúp DN dễ dàng thông qua đánh giá ESG từ khách hàng châu Âu và FDI." },
+      { type: "opportunity", icon: "💰", text: "Cơ hội tiếp cận nguồn tín dụng xanh (green finance) với lãi suất ưu đãi từ ngân hàng phát triển." },
+      { type: "risk", icon: "⚠️", text: "DN sản xuất thép/hàn điện có nguy cơ cao về khí thải, cần ưu tiên hệ thống lọc khói hàn." },
+    ],
+    sources: [
+      { label: "NĐ 08/2022/NĐ-CP – Chính phủ", url: "https://chinhphu.vn" },
+      { label: "Bộ Tài nguyên và Môi trường", url: "https://monre.gov.vn" },
+      { label: "Thư viện pháp luật", url: "https://thuvienphapluat.vn" },
+    ]
+  },
+
+  {
+    id: "LDN-2020",
+    type: "Luật",
+    title: "Luật Doanh nghiệp 2020 và các quy định mới về quản trị công ty tư nhân",
+    industry: ["manufacturing", "construction", "logistics", "transport", "tax", "labor"],
+    status: "active",
+    priority: "medium",
+    effectiveDate: "01/01/2021",
+    authority: "Quốc hội Việt Nam",
+    appliesTo: "Tất cả doanh nghiệp tư nhân, công ty TNHH, công ty cổ phần tại Việt Nam",
+    summary: `Luật Doanh nghiệp 2020 cải cách đăng ký kinh doanh, bổ sung quyền và nghĩa vụ cổ đông, đơn giản hóa thủ tục và tăng cường quản trị minh bạch. Áp dụng cho tất cả loại hình doanh nghiệp.`,
+    keyPoints: [
+      "Bãi bỏ yêu cầu con dấu bắt buộc cho doanh nghiệp (có thể dùng chữ ký số)",
+      "Đơn giản hóa thủ tục đăng ký thay đổi thông tin doanh nghiệp",
+      "Tăng quyền cổ đông thiểu số trong kiểm soát, triệu tập ĐHCĐ",
+      "Bổ sung quy định về quản trị công ty cho DN gia đình, DN tư nhân",
+      "Điều kiện kinh doanh có điều kiện: phải kiểm tra định kỳ",
+    ],
+    impacts: [
+      { area: "Quản trị nội bộ", impact: "Cần chuẩn hóa điều lệ công ty, sổ đăng ký cổ đông", type: "negative" },
+      { area: "Thủ tục hành chính", impact: "Đơn giản hơn, tiết kiệm thời gian và chi phí", type: "positive" },
+      { area: "Chữ ký số", impact: "Cơ hội số hóa toàn bộ quy trình ký kết hợp đồng, văn bản", type: "positive" },
+    ],
+    risks: [
+      { risk: "Điều lệ công ty lỗi thời, không phù hợp LDN 2020", level: "medium" },
+      { risk: "Không cập nhật giấy phép kinh doanh có điều kiện đúng hạn", level: "medium" },
+      { risk: "Tranh chấp nội bộ do thiếu quy chế quản trị rõ ràng", level: "low" },
+    ],
+    actions: [
+      { task: "Rà soát điều lệ công ty, cập nhật theo LDN 2020", dept: "Pháp lý", priority: "medium", deadline: "Trong 90 ngày" },
+      { task: "Triển khai chữ ký số cho lãnh đạo và giao dịch quan trọng", dept: "IT + Pháp lý", priority: "medium", deadline: "Trong 60 ngày" },
+      { task: "Kiểm tra hạn giấy phép kinh doanh có điều kiện (vận tải, XD, MT)", dept: "Pháp lý", priority: "high", deadline: "Trong 30 ngày" },
+    ],
+    aiSupport: [
+      { icon: "📋", text: "AI kiểm tra điều lệ công ty so với yêu cầu LDN 2020, phát hiện điều khoản lỗi thời" },
+      { icon: "📅", text: "AI nhắc hạn gia hạn giấy phép kinh doanh có điều kiện" },
+      { icon: "✍️", text: "AI soạn thảo biên bản họp HĐQT/ĐHCĐ theo mẫu chuẩn pháp lý" },
+    ],
+    insights: [
+      { type: "opportunity", icon: "💻", text: "Đây là thời điểm tốt để số hóa toàn bộ hồ sơ pháp lý doanh nghiệp, tiết kiệm chi phí lưu trữ và tìm kiếm." },
+      { type: "neutral", icon: "🏦", text: "DN có quản trị minh bạch theo LDN 2020 dễ tiếp cận vốn vay ngân hàng và nhà đầu tư hơn." },
+    ],
+    sources: [
+      { label: "Luật Doanh nghiệp 2020 – Quốc hội VN", url: "https://moj.gov.vn" },
+      { label: "Bộ Kế hoạch và Đầu tư", url: "https://mpi.gov.vn" },
+      { label: "Thư viện pháp luật", url: "https://thuvienphapluat.vn" },
+    ]
+  },
+
+  {
+    id: "ND-10-2020",
+    type: "Nghị định",
+    title: "Nghị định 10/2020/NĐ-CP về kinh doanh và điều kiện kinh doanh vận tải bằng xe ô tô",
+    industry: ["transport"],
+    status: "active",
+    priority: "high",
+    effectiveDate: "01/04/2020",
+    authority: "Chính phủ Việt Nam / Bộ GTVT",
+    appliesTo: "Doanh nghiệp vận tải container, đầu kéo, xe tải, logistics",
+    summary: `Nghị định 10/2020/NĐ-CP quy định chi tiết về điều kiện kinh doanh vận tải hàng hóa: phải có giấy phép kinh doanh vận tải, thiết bị GPS kết nối Bộ GTVT, quản lý hành trình tài xế và tuân thủ tải trọng cho phép.`,
+    keyPoints: [
+      "Giấy phép kinh doanh vận tải: bắt buộc cho tất cả xe tải kinh doanh",
+      "GPS kết nối trực tiếp với Bộ GTVT qua phần mềm quản lý hành trình",
+      "Phù hiệu theo loại hình vận tải (hàng hóa thông thường / hàng siêu trường siêu trọng)",
+      "Thẻ nhận dạng tài xế gắn với thiết bị GPS",
+      "Xe sơ mi rơ moóc kéo phải có đăng ký và đăng kiểm đầy đủ",
+    ],
+    impacts: [
+      { area: "Sơ mi rơ moóc / Đầu kéo", impact: "Cần đăng ký đầy đủ, gắn phù hiệu đúng loại hàng vận chuyển", type: "negative" },
+      { area: "Tài xế", impact: "Cần thẻ nhận dạng cá nhân gắn với GPS thiết bị", type: "negative" },
+      { area: "Dữ liệu hành trình", impact: "Dữ liệu GPS được lưu trữ làm bằng chứng khi có vi phạm", type: "neutral" },
+      { area: "Quản lý đội xe", impact: "Cơ hội tối ưu hóa tuyến đường, giảm nhiên liệu", type: "positive" },
+    ],
+    risks: [
+      { risk: "Xe container không có phù hiệu đúng loại, bị dừng xe xử phạt", level: "high" },
+      { risk: "GPS không kết nối Bộ GTVT, mất giấy phép kinh doanh vận tải", level: "critical" },
+      { risk: "Sơ mi rơ moóc hết hạn đăng kiểm, không được hoạt động", level: "high" },
+    ],
+    actions: [
+      { task: "Kiểm tra toàn bộ phù hiệu xe: đúng loại vận tải và còn hạn", dept: "Vận hành", priority: "critical", deadline: "Ngay lập tức" },
+      { task: "Kiểm tra kết nối GPS với hệ thống Bộ GTVT (tại: S-GTVT.moj.gov.vn)", dept: "IT + Kỹ thuật", priority: "high", deadline: "Trong 7 ngày" },
+      { task: "Lập lịch đăng kiểm sơ mi rơ moóc, đăng ký gia hạn trước 30 ngày", dept: "Kỹ thuật", priority: "high", deadline: "Liên tục" },
+    ],
+    aiSupport: [
+      { icon: "📋", text: "AI dashboard tổng hợp hạn phù hiệu, đăng kiểm toàn bộ đội xe" },
+      { icon: "🔔", text: "AI cảnh báo tự động khi xe sắp hết hạn phù hiệu hoặc đăng kiểm" },
+      { icon: "🗺️", text: "AI phân tích tuyến đường GPS tối ưu hóa nhiên liệu và thời gian" },
+    ],
+    insights: [
+      { type: "opportunity", icon: "🚛", text: "DN sở hữu đội xe đầu kéo có GPS và tuân thủ đầy đủ NĐ 10 có thể nhận được hợp đồng vận chuyển từ các công ty lớn (Vingroup, Samsung, FDI) yêu cầu chứng nhận compliance." },
+    ],
+    sources: [
+      { label: "NĐ 10/2020/NĐ-CP – Chính phủ", url: "https://chinhphu.vn" },
+      { label: "Bộ Giao thông Vận tải", url: "https://mt.gov.vn" },
+    ]
+  },
+
+  {
+    id: "ND-82-2018",
+    type: "Nghị định",
+    title: "Nghị định 82/2018/NĐ-CP về quản lý khu công nghiệp và khu kinh tế",
+    industry: ["construction", "manufacturing"],
+    status: "active",
+    priority: "medium",
+    effectiveDate: "10/07/2018",
+    authority: "Chính phủ / Bộ Kế hoạch Đầu tư",
+    appliesTo: "Doanh nghiệp đầu tư hoặc thuê đất trong KCN, nhà xưởng, kho bãi trong KCN",
+    summary: `Nghị định 82/2018/NĐ-CP quy định về thành lập, mở rộng, quản lý KCN và KKT. Doanh nghiệp trong KCN được hưởng nhiều ưu đãi về thuế, đất đai nhưng phải tuân thủ các quy định về môi trường, phòng cháy và an toàn lao động.`,
+    keyPoints: [
+      "DN trong KCN được ưu đãi thuế TNDN 10% trong 15 năm đầu, miễn 4 năm",
+      "Thuê đất KCN: được miễn/giảm tiền thuê đất theo quy định từng địa phương",
+      "Bắt buộc kết nối hạ tầng KCN: điện, nước, HTXLNT tập trung",
+      "Phải có phương án phòng cháy chữa cháy (PCCC) được cơ quan CA phê duyệt",
+      "Xây dựng trong KCN phải theo đúng quy hoạch và giấy phép xây dựng",
+    ],
+    impacts: [
+      { area: "Chi phí sản xuất", impact: "Giảm đáng kể nhờ ưu đãi thuế và hạ tầng KCN", type: "positive" },
+      { area: "Thủ tục đầu tư", impact: "Một cửa tại Ban quản lý KCN, đơn giản hơn ngoài KCN", type: "positive" },
+      { area: "PCCC", impact: "Bắt buộc có hệ thống PCCC đạt chuẩn, chi phí đáng kể", type: "negative" },
+      { area: "Môi trường", impact: "Phải kết nối HTXLNT KCN và tuân thủ quan trắc định kỳ", type: "negative" },
+    ],
+    risks: [
+      { risk: "Không có phương án PCCC được phê duyệt, bị đình chỉ sản xuất", level: "critical" },
+      { risk: "Vi phạm quy hoạch xây dựng KCN, bị buộc tháo dỡ công trình", level: "high" },
+      { risk: "Không kết nối HTXLNT KCN, bị phạt môi trường và đình chỉ", level: "high" },
+    ],
+    actions: [
+      { task: "Kiểm tra giấy phép xây dựng và quy hoạch KCN: có sai lệch không?", dept: "Pháp lý + Xây dựng", priority: "high", deadline: "Trong 14 ngày" },
+      { task: "Nộp hồ sơ thẩm duyệt PCCC (nếu chưa có hoặc có thay đổi)", dept: "An toàn + Xây dựng", priority: "critical", deadline: "Trong 30 ngày" },
+      { task: "Kết nối kỹ thuật với HTXLNT tập trung KCN", dept: "Kỹ thuật + MT", priority: "high", deadline: "Trong 60 ngày" },
+      { task: "Đăng ký ưu đãi thuế với cơ quan thuế địa phương", dept: "Kế toán + Pháp lý", priority: "medium", deadline: "Trong 90 ngày" },
+    ],
+    aiSupport: [
+      { icon: "📋", text: "AI tổng hợp checklist thủ tục đầu tư KCN theo từng tỉnh thành" },
+      { icon: "💰", text: "AI tính toán ưu đãi thuế và so sánh các KCN khác nhau" },
+      { icon: "📅", text: "AI nhắc hạn nộp báo cáo môi trường định kỳ cho KCN" },
+    ],
+    insights: [
+      { type: "opportunity", icon: "💰", text: "Ưu đãi thuế TNDN 10% trong 15 năm giúp tiết kiệm hàng chục tỷ đồng so với sản xuất ngoài KCN." },
+      { type: "opportunity", icon: "🏭", text: "Đầu tư vào KCN gần cảng biển (Hải Phòng, Bà Rịa-Vũng Tàu) giúp giảm chi phí logistics container đáng kể." },
+      { type: "neutral", icon: "📍", text: "Các KCN mới (Long An, Bình Dương) đang mở rộng, cơ hội thuê đất với giá tốt hơn KCN cũ." },
+    ],
+    sources: [
+      { label: "NĐ 82/2018/NĐ-CP – Chính phủ", url: "https://chinhphu.vn" },
+      { label: "Bộ Kế hoạch và Đầu tư", url: "https://mpi.gov.vn" },
+      { label: "Thư viện pháp luật", url: "https://thuvienphapluat.vn" },
+    ]
+  },
+
+  {
+    id: "TT-03-2024",
+    type: "Thông tư",
+    title: "Thông tư 03/2024/TT-BLDTBXH về tiền lương tối thiểu vùng và chế độ lao động 2024",
+    industry: ["labor", "manufacturing", "construction", "logistics"],
+    status: "upcoming",
+    priority: "high",
+    effectiveDate: "01/07/2024",
+    authority: "Bộ Lao động – Thương binh và Xã hội",
+    appliesTo: "Tất cả doanh nghiệp có sử dụng lao động tại Việt Nam",
+    summary: `Lương tối thiểu vùng tăng từ 6% đến 7.3% từ 01/07/2024. Vùng I tăng lên 4.96 triệu đồng/tháng. Ảnh hưởng trực tiếp đến chi phí nhân công của DN sản xuất, vận tải, xây dựng, kho bãi.`,
+    keyPoints: [
+      "Vùng I (Hà Nội, TP.HCM): 4,960,000 đồng/tháng (tăng 6.0%)",
+      "Vùng II: 4,410,000 đồng/tháng (tăng 6.5%)",
+      "Vùng III: 3,860,000 đồng/tháng (tăng 7.3%)",
+      "Vùng IV: 3,450,000 đồng/tháng (tăng 7.0%)",
+      "BHXH, BHYT, BHTN tính trên lương tối thiểu mới",
+    ],
+    impacts: [
+      { area: "Chi phí nhân công", impact: "Tăng 6-7.3% chi phí lương, BHXH, BHYT toàn bộ nhân viên", type: "negative" },
+      { area: "Lao động phổ thông", impact: "Tài xế, công nhân kho, lắp ráp container bị ảnh hưởng nhiều nhất", type: "neutral" },
+      { area: "Cạnh tranh thu hút nhân tài", impact: "DN tăng lương đúng hạn tạo lợi thế tuyển dụng", type: "positive" },
+      { area: "Ngân sách năm 2024", impact: "Cần điều chỉnh dự toán nhân sự năm nếu chưa tính", type: "negative" },
+    ],
+    risks: [
+      { risk: "Không tăng lương đúng quy định, bị thanh tra lao động xử phạt", level: "high" },
+      { risk: "Tranh chấp lao động với công nhân về tiền lương chậm điều chỉnh", level: "medium" },
+      { risk: "Dòng tiền bị ảnh hưởng nếu chưa điều chỉnh ngân sách lương", level: "medium" },
+    ],
+    actions: [
+      { task: "Tính toán lại toàn bộ bảng lương theo mức tối thiểu vùng mới", dept: "HR + Kế toán", priority: "high", deadline: "Trước 01/07/2024" },
+      { task: "Cập nhật phần mềm tính lương, BHXH theo mức mới", dept: "IT + HR", priority: "high", deadline: "Trước 01/07/2024" },
+      { task: "Thông báo cho toàn thể nhân viên về điều chỉnh lương", dept: "HR", priority: "high", deadline: "Trước 01/07/2024" },
+      { task: "Điều chỉnh dự toán ngân sách nhân sự 2024 (6 tháng cuối năm)", dept: "Tài chính", priority: "medium", deadline: "Trong 14 ngày" },
+    ],
+    aiSupport: [
+      { icon: "🧮", text: "AI tính toán tự động tổng chi phí lương tăng thêm theo quy mô nhân sự" },
+      { icon: "📊", text: "AI so sánh mức lương hiện tại với lương tối thiểu vùng, phát hiện vi phạm" },
+      { icon: "📋", text: "AI tạo thông báo điều chỉnh lương chuẩn pháp lý cho nhân viên" },
+    ],
+    insights: [
+      { type: "opportunity", icon: "👥", text: "Doanh nghiệp tăng lương và phúc lợi vượt mức tối thiểu sẽ thu hút được lao động lành nghề, giảm chi phí tuyển dụng và đào tạo." },
+      { type: "risk", icon: "⚠️", text: "DN sản xuất thâm dụng lao động (ráp container, gia công thép) cần xem xét tự động hóa một phần để bù đắp tăng chi phí nhân công." },
+    ],
+    sources: [
+      { label: "Nghị định 74/2024/NĐ-CP về lương tối thiểu – Chính phủ", url: "https://chinhphu.vn" },
+      { label: "Bộ Lao động – Thương binh và Xã hội", url: "https://molisa.gov.vn" },
+      { label: "Thư viện pháp luật", url: "https://thuvienphapluat.vn" },
+    ]
+  },
+];
+
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
+let currentFilter = 'all';
+let currentTab = 'all';
+let currentSearch = '';
+let openCards = new Set();
+
+// ─────────────────────────────────────────────
+//  RENDER
+// ─────────────────────────────────────────────
+function getFiltered() {
+  return regulations.filter(r => {
+    const matchIndustry = currentFilter === 'all' || r.industry.includes(currentFilter);
+    const matchTab = currentTab === 'all' || r.status === currentTab;
+    const q = currentSearch.toLowerCase();
+    const matchSearch = !q ||
+      r.title.toLowerCase().includes(q) ||
+      r.id.toLowerCase().includes(q) ||
+      r.type.toLowerCase().includes(q) ||
+      r.summary.toLowerCase().includes(q) ||
+      r.authority.toLowerCase().includes(q);
+    return matchIndustry && matchTab && matchSearch;
+  });
+}
+
+function renderAll() {
+  const list = getFiltered();
+  const container = document.getElementById('regList');
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🔍</div>
+        <h3>Không tìm thấy văn bản nào</h3>
+        <p>Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+      </div>`;
+    return;
+  }
+  container.innerHTML = list.map(r => renderCard(r)).join('');
+}
+
+function renderCard(r) {
+  const isOpen = openCards.has(r.id);
+  const priorityLabel = { critical: 'Khẩn cấp', high: 'Ưu tiên cao', medium: 'Trung bình', low: 'Thấp' }[r.priority];
+  const statusLabel = { active: 'Có hiệu lực', upcoming: 'Sắp hiệu lực', draft: 'Dự thảo' }[r.status];
+  const statusClass = { active: 'tag-status-active', upcoming: 'tag-status-upcoming', draft: 'tag-status-draft' }[r.status];
+  const industryNames = r.industry.map(i => ({
+    logistics: '🚛 Logistics', transport: '🚌 Vận tải', manufacturing: '🏗️ Sản xuất',
+    construction: '🏢 Xây dựng', tax: '💰 Thuế/HQ', labor: '👷 Lao động'
+  }[i] || i)).join(', ');
+
+  return `
+  <div class="reg-card ${r.priority}" id="card-${r.id}">
+    <div class="reg-header" onclick="toggleCard('${r.id}')">
+      <div class="reg-title-area">
+        <div class="reg-id">${r.type} · ${r.id}</div>
+        <div class="reg-title">${r.title}</div>
+        <div class="reg-meta">
+          <span class="tag tag-industry">${industryNames}</span>
+          <span class="tag tag-status-${r.status}">${r.status === 'draft' ? '📝 ' : r.status === 'upcoming' ? '📅 ' : '✅ '}${statusLabel}</span>
+          <span class="tag tag-type">⚖️ ${r.type}</span>
+        </div>
+      </div>
+      <div class="reg-priority">
+        <div class="priority-badge priority-${r.priority}">
+          ${{ critical: '🔴', high: '🟠', medium: '🟡', low: '🟢' }[r.priority]} ${priorityLabel}
+        </div>
+        <div class="effective-date">📅 Hiệu lực: ${r.effectiveDate}</div>
+        <div class="toggle-arrow ${isOpen ? 'open' : ''}" id="arrow-${r.id}">▼</div>
+      </div>
+    </div>
+    <div class="reg-body ${isOpen ? 'open' : ''}" id="body-${r.id}">
+      ${renderBody(r)}
+    </div>
+  </div>`;
+}
+
+function renderBody(r) {
+  return `
+    <!-- SECTION 1 -->
+    <div class="section-title">📋 1. Tóm tắt nhanh</div>
+    <div class="summary-grid">
+      <div class="summary-item"><div class="summary-label">Văn bản</div><div class="summary-value">${r.id}</div></div>
+      <div class="summary-item"><div class="summary-label">Ngày hiệu lực</div><div class="summary-value">📅 ${r.effectiveDate}</div></div>
+      <div class="summary-item"><div class="summary-label">Cơ quan ban hành</div><div class="summary-value">${r.authority}</div></div>
+      <div class="summary-item"><div class="summary-label">Áp dụng cho</div><div class="summary-value">${r.appliesTo}</div></div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-title">🔑 2. Điều gì quan trọng?</div>
+    <div class="highlight-box">
+      <p>${r.summary}</p>
+      <ul>
+        ${r.keyPoints.map(p => `<li>${p}</li>`).join('')}
+      </ul>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section-title">📊 3. Ảnh hưởng tới doanh nghiệp</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Hạng mục</th><th>Ảnh hưởng</th></tr></thead>
+        <tbody>
+          ${r.impacts.map(i => `
+            <tr>
+              <td><strong>${i.area}</strong></td>
+              <td class="${i.type === 'positive' ? 'impact-positive' : i.type === 'negative' ? 'impact-negative' : 'impact-neutral'}">
+                ${i.type === 'positive' ? '✅' : i.type === 'negative' ? '⚠️' : '➡️'} ${i.impact}
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section-title">⚠️ 4. Rủi ro nếu không tuân thủ</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rủi ro</th><th>Mức độ</th></tr></thead>
+        <tbody>
+          ${r.risks.map(risk => `
+            <tr>
+              <td>${risk.risk}</td>
+              <td><span class="risk-badge risk-${risk.level}-badge">
+                ${{ critical: '🔴 Khẩn cấp', high: '🟠 Cao', medium: '🟡 Trung bình', low: '🟢 Thấp' }[risk.level]}
+              </span></td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section-title">📅 5. Kế hoạch hành động</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Công việc</th><th>Phòng ban</th><th>Ưu tiên</th><th>Deadline</th></tr></thead>
+        <tbody>
+          ${r.actions.map(a => `
+            <tr>
+              <td>${a.task}</td>
+              <td><span class="tag tag-industry">${a.dept}</span></td>
+              <td><span class="risk-badge risk-${a.priority}-badge">
+                ${{ critical: '🔴 Khẩn', high: '🟠 Cao', medium: '🟡 TB', low: '🟢 Thấp' }[a.priority]}
+              </span></td>
+              <td>⏰ ${a.deadline}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SECTION 6 -->
+    <div class="section-title">🤖 6. AI có thể hỗ trợ gì?</div>
+    <div class="ai-grid">
+      ${r.aiSupport.map(ai => `
+        <div class="ai-item">
+          <div class="ai-icon">${ai.icon}</div>
+          <div>${ai.text}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- SECTION 7 -->
+    <div class="section-title">💡 7. Insight kinh doanh</div>
+    <div class="insight-grid">
+      ${r.insights.map(ins => `
+        <div class="insight-item insight-${ins.type}">
+          <div>${ins.icon}</div>
+          <div>${ins.text}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- SECTION 8 -->
+    <div class="section-title">🔗 8. Nguồn chính thức</div>
+    <div class="source-box">
+      ${r.sources.map(s => `
+        <div class="source-item">
+          <span>📎</span>
+          <div>
+            <div style="font-weight:600; font-size:0.82rem;">${s.label}</div>
+            <a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.url}</a>
+          </div>
+        </div>`).join('')}
+    </div>
+
+    ${r.status === 'draft' ? `<div class="disclaimer">📝 <strong>Dự thảo, chưa có hiệu lực.</strong> Thông tin có thể thay đổi trước khi ban hành chính thức.</div>` : ''}
+    <div class="disclaimer">⚠️ <strong>Lưu ý:</strong> Nội dung trên chỉ mang tính tham khảo. Vui lòng tham khảo văn bản gốc từ nguồn chính thức và tư vấn pháp lý chuyên nghiệp trước khi ra quyết định.</div>
+  `;
+}
+
+// ─────────────────────────────────────────────
+//  INTERACTIONS
+// ─────────────────────────────────────────────
+function toggleCard(id) {
+  if (openCards.has(id)) {
+    openCards.delete(id);
+  } else {
+    openCards.add(id);
+  }
+  const body = document.getElementById(`body-${id}`);
+  const arrow = document.getElementById(`arrow-${id}`);
+  if (body) body.classList.toggle('open', openCards.has(id));
+  if (arrow) arrow.classList.toggle('open', openCards.has(id));
+}
+
+function filterBy(industry, btn) {
+  currentFilter = industry;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function switchTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function searchRegs() {
+  currentSearch = document.getElementById('searchInput').value;
+  renderAll();
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  currentSearch = '';
+  renderAll();
+}
+
+function showAddModal() {
+  alert('Tính năng "Thêm văn bản" đang được phát triển.\n\nTrong phiên bản đầy đủ, bạn có thể:\n• Nhập số hiệu văn bản\n• AI tự động tìm kiếm và phân tích\n• Thêm vào danh sách theo dõi');
+}
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderAll();
+});
+</script>
+</body>
+</html>
