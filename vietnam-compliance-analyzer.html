@@ -588,7 +588,7 @@
       </div>
     </div>
     <div class="header-stats">
-      <div class="stat-chip">📋 <span id="totalCount">8</span> Văn bản</div>
+      <div class="stat-chip">📋 <span id="totalCount">11</span> Văn bản</div>
       <div class="stat-chip">🔴 <span id="criticalCount">3</span> Khẩn cấp</div>
       <div class="stat-chip">📅 Cập nhật: <span>17/05/2026</span></div>
     </div>
@@ -615,25 +615,25 @@
       <div class="card-header">🏭 Lọc theo ngành</div>
       <div class="card-body">
         <button class="filter-btn active" onclick="filterBy('all', this)">
-          🌐 Tất cả ngành <span class="badge" id="badge-all">8</span>
+          🌐 Tất cả ngành <span class="badge" id="badge-all">11</span>
         </button>
         <button class="filter-btn" onclick="filterBy('logistics', this)">
-          🚛 Logistics & Kho bãi <span class="badge" id="badge-logistics">3</span>
+          🚛 Logistics & Kho bãi <span class="badge" id="badge-logistics">7</span>
         </button>
         <button class="filter-btn" onclick="filterBy('transport', this)">
-          🚌 Vận tải & Container <span class="badge" id="badge-transport">2</span>
+          🚌 Vận tải & Container <span class="badge" id="badge-transport">7</span>
         </button>
         <button class="filter-btn" onclick="filterBy('manufacturing', this)">
-          🏗️ Sản xuất & Thép <span class="badge" id="badge-manufacturing">2</span>
+          🏗️ Sản xuất & Thép <span class="badge" id="badge-manufacturing">7</span>
         </button>
         <button class="filter-btn" onclick="filterBy('construction', this)">
-          🏢 Xây dựng & KCN <span class="badge" id="badge-construction">3</span>
+          🏢 Xây dựng & KCN <span class="badge" id="badge-construction">6</span>
         </button>
         <button class="filter-btn" onclick="filterBy('tax', this)">
-          💰 Thuế & Hải quan <span class="badge" id="badge-tax">2</span>
+          💰 Thuế & Hải quan <span class="badge" id="badge-tax">5</span>
         </button>
         <button class="filter-btn" onclick="filterBy('labor', this)">
-          👷 Lao động & Môi trường <span class="badge" id="badge-labor">1</span>
+          👷 Lao động & Môi trường <span class="badge" id="badge-labor">3</span>
         </button>
       </div>
     </div>
@@ -648,7 +648,7 @@
         </div>
         <div class="risk-item">
           <span><span class="risk-dot risk-high"></span>Cao – Trong 30 ngày</span>
-          <strong style="color:#e17055">2</strong>
+          <strong style="color:#e17055">6</strong>
         </div>
         <div class="risk-item">
           <span><span class="risk-dot risk-medium"></span>Trung bình – Trong 90 ngày</span>
@@ -656,7 +656,7 @@
         </div>
         <div class="risk-item">
           <span><span class="risk-dot risk-low"></span>Thấp – Theo dõi</span>
-          <strong style="color:#00b894">1</strong>
+          <strong style="color:#00b894">0</strong>
         </div>
       </div>
     </div>
@@ -694,14 +694,14 @@
     <div class="alert-banner">
       <div class="alert-icon">🚨</div>
       <div>
-        <strong>Cảnh báo tuân thủ quan trọng:</strong> Có 3 quy định mới có hiệu lực trong 30 ngày tới liên quan đến vận tải, logistics và kinh doanh container. Doanh nghiệp cần xem xét ngay.
+        <strong>Cảnh báo tuân thủ quan trọng:</strong> Có 3 quy định mức độ KHẨN CẤP liên quan đến vận tải (NĐ 168), môi trường sản xuất (NĐ 08) và Luật Thuế GTGT mới (01/01/2026). Doanh nghiệp cần xem xét và hành động ngay.
       </div>
     </div>
 
     <!-- QUICK STATS -->
     <div class="quick-stats">
       <div class="qs-item">
-        <div class="qs-number qs-red">8</div>
+        <div class="qs-number qs-red">11</div>
         <div class="qs-label">Văn bản đang theo dõi</div>
       </div>
       <div class="qs-item">
@@ -709,11 +709,11 @@
         <div class="qs-label">Cần xử lý khẩn cấp</div>
       </div>
       <div class="qs-item">
-        <div class="qs-number qs-green">5</div>
+        <div class="qs-number qs-green">10</div>
         <div class="qs-label">Có hiệu lực</div>
       </div>
       <div class="qs-item">
-        <div class="qs-number qs-blue">3</div>
+        <div class="qs-number qs-blue">1</div>
         <div class="qs-label">Sắp có hiệu lực</div>
       </div>
     </div>
@@ -727,9 +727,9 @@
 
     <!-- TABS -->
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('all', this)">📋 Tất cả (8)</button>
-      <button class="tab" onclick="switchTab('active', this)">✅ Có hiệu lực (5)</button>
-      <button class="tab" onclick="switchTab('upcoming', this)">📅 Sắp hiệu lực (3)</button>
+      <button class="tab active" onclick="switchTab('all', this)">📋 Tất cả (11)</button>
+      <button class="tab" onclick="switchTab('active', this)">✅ Có hiệu lực (10)</button>
+      <button class="tab" onclick="switchTab('upcoming', this)">📅 Sắp hiệu lực (1)</button>
       <button class="tab" onclick="switchTab('draft', this)">📝 Dự thảo (0)</button>
     </div>
 
@@ -1179,6 +1179,194 @@ const regulations = [
       { label: "Nghị định 74/2024/NĐ-CP về lương tối thiểu – Chính phủ", url: "https://chinhphu.vn" },
       { label: "Bộ Lao động – Thương binh và Xã hội", url: "https://molisa.gov.vn" },
       { label: "Thư viện pháp luật", url: "https://thuvienphapluat.vn" },
+    ]
+  },
+
+  // ─── TAX REGULATIONS ───
+
+  {
+    id: "LUT-GTGT-2024",
+    type: "Luật",
+    title: "Luật Thuế GTGT 48/2024/QH15 – Luật mới thay thế hoàn toàn từ 01/01/2026, hóa đơn điện tử bắt buộc",
+    industry: ["tax", "logistics", "manufacturing", "transport"],
+    status: "active",
+    priority: "critical",
+    effectiveDate: "01/01/2026",
+    authority: "Quốc hội Việt Nam / Bộ Tài chính",
+    appliesTo: "Toàn bộ doanh nghiệp có hoạt động mua bán hàng hóa, dịch vụ tại Việt Nam; logistics; vận tải; sản xuất",
+    summary: `Luật Thuế GTGT số 48/2024/QH15 thay thế hoàn toàn Luật GTGT 2008. Có hiệu lực từ 01/01/2026 với nhiều thay đổi lớn: ngưỡng chịu thuế hộ kinh doanh tăng từ 100 triệu lên 500 triệu đồng/năm; sàn thương mại điện tử bắt buộc khấu trừ nộp thay thuế; vận tải quốc tế và xuất khẩu hưởng thuế suất 0%; hóa đơn điện tử bắt buộc toàn bộ doanh nghiệp.`,
+    keyPoints: [
+      "Ngưỡng doanh thu chịu thuế GTGT hộ kinh doanh: tăng từ 100 triệu lên 500 triệu đồng/năm",
+      "Dịch vụ vận tải quốc tế, kho ngoại quan, xuất khẩu hàng hóa: thuế suất GTGT 0% nếu đủ điều kiện",
+      "Sàn thương mại điện tử: bắt buộc khấu trừ và nộp thuế thay người bán từ 01/07/2025",
+      "Hóa đơn điện tử: bắt buộc toàn bộ doanh nghiệp từ 01/01/2026 theo Nghị định 123/2020",
+      "Sản phẩm kim loại (thép, nhôm), khai khoáng: KHÔNG được giảm thuế, vẫn áp dụng thuế suất 10%",
+      "Dịch vụ logistics nội địa, vận tải hàng hóa trong nước: thuế suất 10% (hoặc 8% nếu thuộc NQ giảm GTGT)",
+    ],
+    impacts: [
+      { area: "Vận tải quốc tế & Kho ngoại quan", impact: "Cơ hội hoàn thuế GTGT 0% nếu đủ điều kiện, giảm chi phí đáng kể", type: "positive" },
+      { area: "Hóa đơn điện tử", impact: "Bắt buộc 100% từ 01/01/2026, cần nâng cấp phần mềm kế toán", type: "negative" },
+      { area: "Sản xuất thép/container", impact: "Sản phẩm kim loại không được giảm thuế GTGT, vẫn 10%", type: "negative" },
+      { area: "Hộ kinh doanh nhỏ (dưới 500 triệu/năm)", impact: "Được miễn thuế GTGT – giảm gánh nặng hành chính", type: "positive" },
+      { area: "Phần mềm kế toán", impact: "Bắt buộc nâng cấp để xuất hóa đơn điện tử đúng chuẩn mới", type: "negative" },
+    ],
+    risks: [
+      { risk: "Không chuyển đổi sang hóa đơn điện tử đúng hạn 01/01/2026, bị phạt vi phạm", level: "critical" },
+      { risk: "Kê khai sai thuế suất GTGT (10% vs 8% vs 0%), bị truy thu + phạt lãi chậm nộp", level: "critical" },
+      { risk: "Vận tải quốc tế không lưu đủ chứng từ, mất quyền khấu trừ thuế suất 0%", level: "high" },
+      { risk: "Sản phẩm thép/container bị nhầm lẫn thuế suất, truy thu thuế GTGT", level: "high" },
+      { risk: "Phần mềm kế toán chưa cập nhật, xuất hóa đơn sai định dạng", level: "medium" },
+    ],
+    actions: [
+      { task: "Rà soát toàn bộ danh mục hàng hóa/dịch vụ: phân loại thuế suất GTGT theo Luật 48/2024", dept: "Kế toán + Pháp lý", priority: "critical", deadline: "Ngay lập tức" },
+      { task: "Chuyển đổi 100% sang hóa đơn điện tử đúng chuẩn Nghị định 123/2020", dept: "IT + Kế toán", priority: "critical", deadline: "Trước 01/01/2026" },
+      { task: "Xác nhận điều kiện thuế suất 0% cho vận tải quốc tế, kho ngoại quan", dept: "Kế toán + Pháp lý", priority: "high", deadline: "Trong 14 ngày" },
+      { task: "Đào tạo kế toán viên về Luật GTGT 48/2024 và các thay đổi thuế suất", dept: "HR + Kế toán", priority: "high", deadline: "Trong 30 ngày" },
+      { task: "Kiểm tra phần mềm kế toán: đã tích hợp hóa đơn điện tử chuẩn mới chưa?", dept: "IT", priority: "high", deadline: "Trong 30 ngày" },
+      { task: "Xem xét đăng ký hoàn thuế GTGT 0% cho lô hàng xuất khẩu, vận tải quốc tế", dept: "Kế toán + XNK", priority: "medium", deadline: "Trong 60 ngày" },
+    ],
+    aiSupport: [
+      { icon: "🔢", text: "AI tự động phân loại thuế suất GTGT (0%/8%/10%) theo mã hàng hóa/dịch vụ" },
+      { icon: "📄", text: "AI kiểm tra hóa đơn điện tử đúng định dạng và đủ thông tin bắt buộc" },
+      { icon: "💰", text: "AI tính toán và lập hồ sơ hoàn thuế GTGT xuất khẩu, vận tải quốc tế" },
+      { icon: "⚠️", text: "AI cảnh báo tự động khi kê khai sai thuế suất so với danh mục" },
+      { icon: "📊", text: "AI báo cáo tổng hợp thuế GTGT đầu vào/đầu ra hàng tháng" },
+      { icon: "📋", text: "AI tạo checklist tuân thủ hóa đơn điện tử hàng tháng" },
+    ],
+    insights: [
+      { type: "opportunity", icon: "🚢", text: "Dịch vụ vận tải quốc tế và kho ngoại quan được hưởng thuế suất 0% GTGT — lợi thế cạnh tranh lớn, có thể tối ưu cơ cấu dịch vụ để tận dụng." },
+      { type: "opportunity", icon: "💻", text: "Chuyển sang hóa đơn điện tử giúp tiết kiệm chi phí in ấn, lưu trữ, tìm kiếm — đồng thời tăng độ chính xác kế toán." },
+      { type: "risk", icon: "⚠️", text: "DN sản xuất thép và container cần kiểm tra kỹ: sản phẩm kim loại KHÔNG được giảm GTGT, tránh nhầm lẫn thuế suất." },
+      { type: "neutral", icon: "📋", text: "Nên xem xét lại cơ cấu hợp đồng dịch vụ logistics để phân tách rõ phần vận tải quốc tế (0%) và dịch vụ nội địa (8%/10%)." },
+    ],
+    sources: [
+      { label: "Luật 48/2024/QH15 – Thuế GTGT – Quốc hội VN", url: "https://vanban.chinhphu.vn" },
+      { label: "Thư viện pháp luật – Luật GTGT 2024", url: "https://thuvienphapluat.vn/phap-luat/luat-thue-gia-tri-gia-tang-moi-nhat-2026-va-cac-nghi-dinh-thong-tu-huong-dan-moi-nhat-hien-nay-398530-248988.html" },
+      { label: "Bộ Tài chính Việt Nam", url: "https://mof.gov.vn" },
+      { label: "Vietnam Briefing – New VAT Law 2026", url: "https://www.vietnam-briefing.com/news/vietnam-new-vat-law-key-compliance-guidance.html/" },
+    ]
+  },
+
+  {
+    id: "LUT-TNDN-2025",
+    type: "Luật",
+    title: "Luật Thuế TNDN 67/2025/QH15 – Siêu khấu trừ R&D 200%, ưu đãi KCN, thanh toán không tiền mặt",
+    industry: ["tax", "manufacturing", "construction"],
+    status: "active",
+    priority: "high",
+    effectiveDate: "01/10/2025",
+    authority: "Quốc hội Việt Nam / Bộ Tài chính – Nghị định 320/2025/NĐ-CP hướng dẫn",
+    appliesTo: "Tất cả doanh nghiệp Việt Nam; đặc biệt DN sản xuất, xây dựng, DN trong KCN, DN có giao dịch nước ngoài",
+    summary: `Luật Thuế TNDN số 67/2025/QH15 thay thế Luật TNDN cũ, hiệu lực từ 01/10/2025 (áp dụng từ năm tính thuế 2025). Thay đổi lớn: siêu khấu trừ chi phí R&D lên tới 200%; ưu đãi thuế 10% cho DN trong KCN và vùng khó khăn; ngưỡng thanh toán không tiền mặt 5 triệu đồng; DN nước ngoài TMĐT bị coi là cơ sở thường trú tại Việt Nam.`,
+    keyPoints: [
+      "Thuế suất TNDN chuẩn: 20% (không thay đổi)",
+      "Siêu khấu trừ R&D: chi phí nghiên cứu phát triển hợp lệ được khấu trừ tới 200% (Nghị định 320/2025)",
+      "Ưu đãi KCN và vùng đặc biệt: thuế suất 10% trong 15 năm đầu, miễn thuế 4 năm, giảm 50% trong 9 năm tiếp theo",
+      "Ngưỡng thanh toán không dùng tiền mặt: giao dịch >5 triệu đồng phải qua ngân hàng mới được khấu trừ (từ 15/12/2025)",
+      "Lãi vay trần EBITDA: chi phí lãi vay được khấu trừ tối đa 30% EBITDA (thu nhập trước lãi vay, thuế, khấu hao)",
+      "DN nước ngoài TMĐT & nền tảng số: bị coi là cơ sở thường trú VN, chịu thuế TNDN Việt Nam",
+    ],
+    impacts: [
+      { area: "DN sản xuất trong KCN", impact: "Hưởng ưu đãi thuế TNDN 10%/15 năm + miễn 4 năm nếu đủ điều kiện – tiết kiệm hàng tỷ đồng", type: "positive" },
+      { area: "Chi phí R&D (máy móc, công nghệ)", impact: "Siêu khấu trừ 200% giúp tiết kiệm thuế đáng kể nếu đầu tư vào R&D", type: "positive" },
+      { area: "Thanh toán tiền mặt >5 triệu", impact: "Không được tính vào chi phí hợp lệ – cần chuyển sang thanh toán ngân hàng", type: "negative" },
+      { area: "DN vay vốn nhiều (bất động sản, xây dựng)", impact: "Lãi vay bị khống chế 30% EBITDA, có thể bị loại trừ chi phí", type: "negative" },
+      { area: "Kế toán thuế TNDN", impact: "Cần nắm rõ các quy định mới về khấu trừ, ưu đãi để tối ưu thuế", type: "neutral" },
+    ],
+    risks: [
+      { risk: "Không đăng ký ưu đãi thuế KCN với Cục Thuế địa phương, mất ưu đãi hàng tỷ đồng mỗi năm", level: "high" },
+      { risk: "Thanh toán tiền mặt >5 triệu không được khấu trừ, tăng thu nhập chịu thuế", level: "high" },
+      { risk: "Chi phí R&D không đủ điều kiện siêu khấu trừ, bị loại trừ khi quyết toán", level: "medium" },
+      { risk: "Lãi vay vượt trần 30% EBITDA, bị loại khỏi chi phí hợp lý", level: "medium" },
+      { risk: "Không lưu đủ chứng từ cho chi phí R&D và thanh toán ngân hàng", level: "medium" },
+    ],
+    actions: [
+      { task: "Kiểm tra điều kiện ưu đãi thuế TNDN 10% trong KCN: đã đăng ký với Cục Thuế chưa?", dept: "Kế toán + Pháp lý", priority: "high", deadline: "Trong 14 ngày" },
+      { task: "Rà soát tất cả khoản thanh toán: chuyển >5 triệu sang thanh toán ngân hàng", dept: "Kế toán + Mua sắm", priority: "high", deadline: "Trong 7 ngày" },
+      { task: "Lập danh sách chi phí R&D đủ điều kiện siêu khấu trừ 200%", dept: "Kế toán + Kỹ thuật", priority: "high", deadline: "Trong 30 ngày" },
+      { task: "Kiểm tra tỷ lệ lãi vay/EBITDA: đảm bảo không vượt 30%", dept: "Tài chính + Kế toán", priority: "medium", deadline: "Trong 30 ngày" },
+      { task: "Đào tạo kế toán về Luật TNDN 2025 và NĐ 320/2025 hướng dẫn", dept: "HR + Kế toán", priority: "medium", deadline: "Trong 45 ngày" },
+      { task: "Làm việc với tư vấn thuế để tối ưu cơ cấu chi phí R&D và ưu đãi KCN", dept: "Tài chính + Pháp lý", priority: "medium", deadline: "Trong 60 ngày" },
+    ],
+    aiSupport: [
+      { icon: "💰", text: "AI tính toán ưu đãi thuế TNDN trong KCN theo quy mô và loại ngành nghề" },
+      { icon: "🔬", text: "AI phân loại chi phí R&D đủ điều kiện siêu khấu trừ 200% theo Nghị định 320" },
+      { icon: "🧮", text: "AI theo dõi tỷ lệ lãi vay/EBITDA hàng quý, cảnh báo khi gần vượt ngưỡng 30%" },
+      { icon: "📋", text: "AI kiểm tra danh sách giao dịch tiền mặt >5 triệu, đề xuất chuyển sang ngân hàng" },
+      { icon: "📊", text: "AI lập báo cáo quyết toán thuế TNDN tự động, phát hiện chi phí bị loại trừ" },
+    ],
+    insights: [
+      { type: "opportunity", icon: "🏭", text: "DN sản xuất container, thép, sơ mi rơ moóc trong KCN đủ điều kiện: ưu đãi thuế TNDN 10%/15 năm + miễn 4 năm = tiết kiệm hàng chục tỷ đồng tổng cộng." },
+      { type: "opportunity", icon: "🔬", text: "Siêu khấu trừ R&D 200%: đầu tư vào máy móc thiết bị nghiên cứu, cải tiến quy trình sản xuất container hoặc sơ mi rơ moóc có thể giảm thuế TNDN đáng kể." },
+      { type: "risk", icon: "⚠️", text: "DN xây dựng và bất động sản vay vốn nhiều: kiểm tra ngay tỷ lệ lãi vay/EBITDA, nếu vượt 30% cần tái cơ cấu tài chính trước kỳ quyết toán." },
+      { type: "neutral", icon: "📈", text: "Đây là thời điểm tốt để rà soát toàn bộ cơ cấu chi phí và ưu đãi thuế cùng tư vấn thuế chuyên nghiệp, đặc biệt với năm tính thuế 2025." },
+    ],
+    sources: [
+      { label: "Luật 67/2025/QH15 – Thuế TNDN – Chính phủ VN", url: "https://vanban.chinhphu.vn/?pageid=27160&docid=214607&classid=1&typegroupid=3" },
+      { label: "Baker McKenzie – Vietnam New CIT Decree 2026", url: "https://www.bakermckenzie.com/en/insight/publications/2026/01/vietnam-new-corporate-income-tax-decree" },
+      { label: "EY – Vietnam passes new CIT law", url: "https://www.ey.com/en_gl/technical/tax-alerts/vietnam-passes-new-corporate-income-tax-law" },
+      { label: "Thư viện pháp luật – Luật TNDN 2025", url: "https://thuvienphapluat.vn/phap-luat-doanh-nghiep/bai-viet/diem-dang-chu-y-thong-tu-20-2026-tt-btc-huong-dan-luat-thue-tndn-2025-19549.html" },
+      { label: "Bộ Tài chính Việt Nam", url: "https://mof.gov.vn" },
+    ]
+  },
+
+  {
+    id: "NQ-204-2025",
+    type: "Nghị quyết",
+    title: "Nghị quyết 204/2025/QH15 – Giảm 2% thuế GTGT (từ 10% xuống 8%) đến hết 31/12/2026",
+    industry: ["tax", "logistics", "manufacturing", "transport", "construction"],
+    status: "active",
+    priority: "high",
+    effectiveDate: "01/07/2025",
+    authority: "Quốc hội Việt Nam",
+    appliesTo: "Doanh nghiệp có hàng hóa/dịch vụ thuế suất GTGT 10%; logistics, vận tải nội địa, xây dựng, dịch vụ kho bãi",
+    summary: `Nghị quyết 204/2025/QH15 gia hạn chính sách giảm 2% thuế GTGT từ 01/07/2025 đến hết 31/12/2026. Thuế suất giảm từ 10% xuống 8% cho phần lớn hàng hóa và dịch vụ. Dịch vụ logistics nội địa, vận tải hàng hóa, xây dựng được hưởng. Ngoại lệ: viễn thông, tài chính, ngân hàng, bảo hiểm, bất động sản, sản phẩm kim loại (thép, nhôm), khai khoáng (trừ than).`,
+    keyPoints: [
+      "Thuế GTGT giảm từ 10% xuống 8% cho phần lớn hàng hóa và dịch vụ",
+      "Thời gian áp dụng: 01/07/2025 đến hết 31/12/2026",
+      "Dịch vụ logistics nội địa, kho bãi, vận tải hàng hóa trong nước: được giảm xuống 8%",
+      "Dịch vụ xây dựng và lắp đặt: được giảm xuống 8%",
+      "KHÔNG được giảm (vẫn 10%): sản phẩm kim loại (thép, inox, nhôm), khai khoáng (trừ than), viễn thông, tài chính, ngân hàng, BĐS",
+      "Doanh nghiệp phải cập nhật phần mềm kế toán và lập hóa đơn đúng thuế suất 8%",
+    ],
+    impacts: [
+      { area: "Dịch vụ logistics & kho bãi nội địa", impact: "Giảm GTGT từ 10% xuống 8% – giảm chi phí hoặc tăng biên lợi nhuận", type: "positive" },
+      { area: "Dịch vụ vận tải hàng hóa nội địa", impact: "Giảm GTGT 2% – lợi thế cạnh tranh về giá so với đối thủ chưa áp dụng đúng", type: "positive" },
+      { area: "Dịch vụ xây dựng & lắp đặt", impact: "Giảm GTGT 2% trên giá trị hợp đồng – tiết kiệm đáng kể với hợp đồng lớn", type: "positive" },
+      { area: "Sản xuất thép & container (sản phẩm kim loại)", impact: "KHÔNG được giảm thuế – vẫn áp dụng 10%, cần phân biệt rõ trong hóa đơn", type: "negative" },
+      { area: "Phần mềm kế toán & hóa đơn", impact: "Cần cập nhật ngay thuế suất 8% cho đúng danh mục hàng hóa/dịch vụ", type: "negative" },
+    ],
+    risks: [
+      { risk: "Áp dụng sai thuế suất 8% cho sản phẩm kim loại/thép (phải là 10%), bị truy thu GTGT + phạt", level: "critical" },
+      { risk: "Không cập nhật phần mềm hóa đơn, xuất hóa đơn sai thuế suất 10% thay vì 8%", level: "high" },
+      { risk: "Khách hàng yêu cầu điều chỉnh hóa đơn, phát sinh công việc điều chỉnh lớn", level: "medium" },
+      { risk: "Kê khai thuế GTGT sai do nhầm danh mục được giảm và không được giảm", level: "high" },
+    ],
+    actions: [
+      { task: "Phân loại toàn bộ danh mục hàng hóa/dịch vụ: cái nào được 8%, cái nào vẫn 10%?", dept: "Kế toán + Kinh doanh", priority: "critical", deadline: "Ngay lập tức" },
+      { task: "Cập nhật phần mềm kế toán và phần mềm hóa đơn điện tử theo thuế suất 8%", dept: "IT + Kế toán", priority: "critical", deadline: "Trước 01/07/2025" },
+      { task: "Thông báo cho khách hàng và nhà cung cấp về thay đổi thuế suất GTGT", dept: "Kinh doanh + Kế toán", priority: "high", deadline: "Trong 7 ngày" },
+      { task: "Kiểm tra lại tất cả hợp đồng dịch vụ logistics: điều chỉnh giá nếu GTGT thay đổi", dept: "Pháp lý + Kinh doanh", priority: "high", deadline: "Trong 14 ngày" },
+      { task: "Đào tạo kế toán về danh mục hàng hóa được/không được giảm GTGT", dept: "HR + Kế toán", priority: "high", deadline: "Trong 14 ngày" },
+    ],
+    aiSupport: [
+      { icon: "🔢", text: "AI tự động phân loại hàng hóa/dịch vụ: 8% hay 10% theo NQ 204/2025" },
+      { icon: "📄", text: "AI kiểm tra hóa đơn điện tử: đúng thuế suất 8%/10% cho từng dòng hàng" },
+      { icon: "💰", text: "AI tính toán tiết kiệm thuế GTGT ước tính từ chính sách giảm 2%" },
+      { icon: "⚠️", text: "AI cảnh báo khi áp dụng sai thuế suất cho sản phẩm kim loại (vẫn 10%)" },
+      { icon: "📊", text: "AI báo cáo đối chiếu kê khai GTGT đầu vào/đầu ra hàng tháng" },
+    ],
+    insights: [
+      { type: "opportunity", icon: "💡", text: "Dịch vụ logistics và vận tải nội địa được giảm 2% GTGT: cơ hội điều chỉnh giá cạnh tranh hơn hoặc tăng biên lợi nhuận đến hết 2026." },
+      { type: "opportunity", icon: "🏗️", text: "Dịch vụ xây dựng và lắp đặt thiết bị công nghiệp: tiết kiệm 2% GTGT trên toàn bộ giá trị hợp đồng — đặc biệt ý nghĩa với hợp đồng trị giá hàng chục tỷ đồng." },
+      { type: "risk", icon: "⚠️", text: "Sản xuất thép và container (sản phẩm kim loại): KHÔNG được giảm GTGT — doanh nghiệp cần phân biệt rõ ràng trong hóa đơn giữa dịch vụ vận tải (8%) và sản phẩm thép (10%)." },
+      { type: "neutral", icon: "📋", text: "Nghị quyết có hiệu lực đến 31/12/2026: tận dụng tốt trong 18 tháng này, đặc biệt với các hợp đồng lớn dài hạn." },
+    ],
+    sources: [
+      { label: "Nghị quyết 204/2025/QH15 – Quốc hội VN / Báo Chính phủ", url: "https://baochinhphu.vn/giam-thue-gia-tri-gia-tang-tu-01-7-2025-den-het-31-12-2026-10225070118590677.htm" },
+      { label: "Thư viện pháp luật – Giảm thuế GTGT 2025-2026", url: "https://thuvienphapluat.vn/phap-luat-doanh-nghiep/bai-viet/danh-muc-hang-hoa-dich-vu-duoc-giam-2-thue-gtgt-nam-2025-va-2026-12823.html" },
+      { label: "08 Quy định mới về thuế từ 01/7/2025 – Bộ Tư pháp", url: "https://htpldn.moj.gov.vn/Pages/chi-tiet-tin.aspx?ItemID=117&l=Vanbanchinhsachmoi" },
+      { label: "Bộ Tài chính Việt Nam", url: "https://mof.gov.vn" },
     ]
   },
 ];
